@@ -1,3 +1,4 @@
 /app/cache/
 .idea
 .phalcon
+composer.lock
