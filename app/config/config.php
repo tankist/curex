@@ -1,14 +1,16 @@
 <?php
 
-return new \Phalcon\Config(array(
-    'database' => array(
+$local = @include 'config.local.php';
+
+return new \Phalcon\Config(array_replace_recursive([
+    'database' => [
         'adapter'     => 'Mysql',
         'host'        => 'localhost',
-        'username'    => 'root',
+        'username'    => 'curex',
         'password'    => '',
-        'dbname'      => 'test',
-    ),
-    'application' => array(
+        'dbname'      => 'curex',
+    ],
+    'application' => [
         'controllersDir' => __DIR__ . '/../../app/controllers/',
         'modelsDir'      => __DIR__ . '/../../app/models/',
         'viewsDir'       => __DIR__ . '/../../app/views/',
@@ -16,5 +18,5 @@ return new \Phalcon\Config(array(
         'libraryDir'     => __DIR__ . '/../../app/library/',
         'cacheDir'       => __DIR__ . '/../../app/cache/',
         'baseUri'        => '/curex/',
-    )
-));
+    ],
+], (array)$local));

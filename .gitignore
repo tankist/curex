@@ -1,4 +1,6 @@
 /app/cache/
-.idea
-.phalcon
+/.idea/
+/.phalcon/
+/vendor/
 composer.lock
+config.local.php
