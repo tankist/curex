@@ -45,6 +45,12 @@ class Offer extends Model
 
     /**
      *
+     * @var string
+     */
+    protected $update_date;
+
+    /**
+     *
      * @var integer
      */
     protected $user_id;
@@ -129,6 +135,19 @@ class Offer extends Model
     public function setEndDate($end_date)
     {
         $this->end_date = $end_date;
+
+        return $this;
+    }
+
+    /**
+     * Method to set the value of field update_date
+     *
+     * @param string $update_date
+     * @return $this
+     */
+    public function setUpdateDate($update_date)
+    {
+        $this->update_date = $update_date;
 
         return $this;
     }
@@ -220,6 +239,16 @@ class Offer extends Model
     }
 
     /**
+     * Returns the value of field update_date
+     *
+     * @return string
+     */
+    public function getUpdateDate()
+    {
+        return $this->update_date;
+    }
+
+    /**
      * Returns the value of field user_id
      *
      * @return integer
@@ -245,7 +274,6 @@ class Offer extends Model
     public function initialize()
     {
         $this->setSource('offers');
-
     }
 
     /**
@@ -260,6 +288,7 @@ class Offer extends Model
             'amount' => 'amount',
             'start_date' => 'start_date',
             'end_date' => 'end_date',
+            'update_date' => 'update_date',
             'user_id' => 'user_id',
             'rate' => 'rate'
         );
