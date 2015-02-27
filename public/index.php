@@ -12,12 +12,12 @@ try {
     /**
      * Read auto-loader
      */
-    include __DIR__ . "/../app/config/loader.php";
+    include __DIR__ . "/../vendor/autoload.php";
 
     /**
      * Read services
      */
-    include __DIR__ . "/../app/config/services.php";
+    $di = include __DIR__ . "/../app/config/services.php";
 
     /**
      * Handle the request

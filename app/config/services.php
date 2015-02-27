@@ -78,3 +78,9 @@ $di->set('session', function () {
 
     return $session;
 });
+
+$di->setShared('router', function () use ($config) {
+    return require __DIR__ . '/routes.php';
+});
+
+return $di;

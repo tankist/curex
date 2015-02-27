@@ -11,5 +11,12 @@
     ],
     "require": {
         "hannesvdvreken/php-oauth": "1.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Controller\\": "app/controllers/",
+            "Model\\": "app/models/",
+            "Plugin\\": "app/plugins/"
+        }
     }
 }
