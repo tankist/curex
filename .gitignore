@@ -2,5 +2,6 @@
 /.idea/
 /.phalcon/
 /vendor/
+/public/components
 composer.lock
 config.local.php

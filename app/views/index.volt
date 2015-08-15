@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Phalcon PHP Framework</title>
+		<title>Curex</title>
 	</head>
 	<body>
 		{{ content() }}

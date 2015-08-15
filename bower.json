@@ -1,0 +1,24 @@
+{
+    "name": "curex",
+    "version": "0.0.1",
+    "homepage": "https://github.com/tankist/curex",
+    "authors": [
+        "tankist <stalin1945@gmail.com>"
+    ],
+    "description": "Currency exchange helper",
+    "main": "public/index.php",
+    "keywords": [
+        "curex"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "public/bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "bootstrap": "~3.3.5"
+    }
+}

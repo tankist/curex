@@ -1,3 +1,5 @@
-<h1>Congratulations!</h1>
+<section class="filter">
+    <form action="#filter" class="form-inline">
 
-<p>You're now flying with Phalcon. Great things are about to happen!</p>
+    </form>
+</section>
