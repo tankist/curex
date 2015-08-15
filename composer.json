@@ -16,7 +16,8 @@
         "psr-4": {
             "Controller\\": "app/controllers/",
             "Model\\": "app/models/",
-            "Plugin\\": "app/plugins/"
+            "Plugin\\": "app/plugins/",
+            "Form\\": "app/forms/"
         }
     }
 }

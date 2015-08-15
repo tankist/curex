@@ -4,7 +4,13 @@ namespace Model;
 
 use Phalcon\Mvc\Model;
 
-class Users extends Model
+/**
+ * Class User
+ * @package Model
+ *
+ * @method Offer[] getOffers
+ */
+class User extends Model
 {
 
     /**
@@ -150,6 +156,13 @@ class Users extends Model
     public function getOauthData()
     {
         return $this->oauth_data;
+    }
+
+    public function initialize()
+    {
+        $this->setSource('users');
+
+        $this->hasMany('id', 'Model\\Offer', 'user_id', ['alias' => 'Offers']);
     }
 
     /**

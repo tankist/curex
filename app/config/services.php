@@ -154,4 +154,33 @@ $di->setShared('acl', function () use ($di, $config) {
     return $acl;
 });
 
+$di['assets'] = function () {
+    $assets = require_once __DIR__ . '/assets.php';
+    return $assets;
+};
+
+// Register the flash service with custom CSS classes
+$di['flash'] = function () {
+    $flash = new \Phalcon\Flash\Direct(
+        array(
+            'error'   => 'alert alert-danger',
+            'success' => 'alert alert-success',
+            'notice'  => 'alert alert-info',
+            'warning' => 'alert alert-warning'
+        )
+    );
+    return $flash;
+};
+$di['flashSession'] = function () {
+    $flash = new \Phalcon\Flash\Session(
+        array(
+            'error'   => 'alert alert-danger',
+            'success' => 'alert alert-success',
+            'notice'  => 'alert alert-info',
+            'warning' => 'alert alert-warning'
+        )
+    );
+    return $flash;
+};
+
 return $di;

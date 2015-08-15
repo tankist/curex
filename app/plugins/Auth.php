@@ -2,6 +2,7 @@
 
 namespace Plugin;
 
+use Model\User;
 use Phalcon\Acl;
 use Phalcon\Acl\Adapter\Memory as AclAdapter;
 use Phalcon\Mvc\Dispatcher;
@@ -41,7 +42,12 @@ class Auth extends Plugin
                 }*/
             }
         }
+
+        //Tets only
         $role = 'user';
+        $user = User::findFirst(1);
+        $dispatcher->setParam('user', $user);
+
         $controller = strtolower($dispatcher->getControllerName());
         $action = strtolower($dispatcher->getActionName());
 

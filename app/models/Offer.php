@@ -4,8 +4,18 @@ namespace Model;
 
 use Phalcon\Mvc\Model;
 
+/**
+ * Class Offer
+ * @package Model
+ *
+ * @method User getUser
+ */
 class Offer extends Model
 {
+
+    const TYPE_BUY = 'buy';
+
+    const TYPE_SELL = 'sell';
 
     /**
      *
@@ -274,6 +284,8 @@ class Offer extends Model
     public function initialize()
     {
         $this->setSource('offers');
+
+        $this->belongsTo('user_id', 'Model\\User', 'id', ['alias' => 'User']);
     }
 
     /**
