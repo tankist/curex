@@ -12,7 +12,14 @@
     <![endif]-->
 </head>
 <body>
-<div class="container">{{ content() }}</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-offset-3 col-lg-6">
+            {{ flashSession.output() }}
+        </div>
+    </div>
+    {{ content() }}
+</div>
 {{ assets.outputJs('layoutJs') }}
 </body>
 </html>

@@ -9,13 +9,14 @@ use Phalcon\Mvc\Model;
  * @package Model
  *
  * @method User getUser
+ * @method Currency getCurrency
  */
 class Offer extends Model
 {
 
-    const TYPE_BUY = 'buy';
+    const TYPE_BUY = 0;
 
-    const TYPE_SELL = 'sell';
+    const TYPE_SELL = 1;
 
     /**
      *
@@ -33,7 +34,7 @@ class Offer extends Model
      *
      * @var string
      */
-    protected $currency;
+    protected $currency_id;
 
     /**
      *
@@ -72,6 +73,11 @@ class Offer extends Model
     protected $rate;
 
     /**
+     * @var array
+     */
+    protected static $offerTypes = [self::TYPE_BUY => 'Buy', self::TYPE_SELL => 'Sell'];
+
+    /**
      * Method to set the value of field id
      *
      * @param integer $id
@@ -87,25 +93,29 @@ class Offer extends Model
     /**
      * Method to set the value of field offer_type
      *
-     * @param string $offer_type
+     * @param string $offerType
      * @return $this
      */
-    public function setOfferType($offer_type)
+    public function setOfferType($offerType)
     {
-        $this->offer_type = $offer_type;
+        if (!in_array($offerType, self::$offerTypes)) {
+            throw new \InvalidArgumentException(sprintf('Offer type "%s" not available', $offerType));
+        }
+
+        $this->offer_type = array_search($offerType, self::$offerTypes);
 
         return $this;
     }
 
     /**
-     * Method to set the value of field currency
+     * Method to set the value of field currency_id
      *
-     * @param string $currency
+     * @param string $currencyId
      * @return $this
      */
-    public function setCurrency($currency)
+    public function setCurrencyId($currencyId)
     {
-        $this->currency = $currency;
+        $this->currency_id = $currencyId;
 
         return $this;
     }
@@ -126,12 +136,12 @@ class Offer extends Model
     /**
      * Method to set the value of field start_date
      *
-     * @param string $start_date
+     * @param string $startDate
      * @return $this
      */
-    public function setStartDate($start_date)
+    public function setStartDate($startDate)
     {
-        $this->start_date = $start_date;
+        $this->start_date = $startDate;
 
         return $this;
     }
@@ -139,12 +149,12 @@ class Offer extends Model
     /**
      * Method to set the value of field end_date
      *
-     * @param string $end_date
+     * @param string $endDate
      * @return $this
      */
-    public function setEndDate($end_date)
+    public function setEndDate($endDate)
     {
-        $this->end_date = $end_date;
+        $this->end_date = $endDate;
 
         return $this;
     }
@@ -152,12 +162,12 @@ class Offer extends Model
     /**
      * Method to set the value of field update_date
      *
-     * @param string $update_date
+     * @param string $updateDate
      * @return $this
      */
-    public function setUpdateDate($update_date)
+    public function setUpdateDate($updateDate)
     {
-        $this->update_date = $update_date;
+        $this->update_date = $updateDate;
 
         return $this;
     }
@@ -165,12 +175,12 @@ class Offer extends Model
     /**
      * Method to set the value of field user_id
      *
-     * @param integer $user_id
+     * @param integer $userId
      * @return $this
      */
-    public function setUserId($user_id)
+    public function setUserId($userId)
     {
-        $this->user_id = $user_id;
+        $this->user_id = $userId;
 
         return $this;
     }
@@ -205,17 +215,17 @@ class Offer extends Model
      */
     public function getOfferType()
     {
-        return $this->offer_type;
+        return (isset(self::$offerTypes[$this->offer_type])) ? self::$offerTypes[$this->offer_type] : '';
     }
 
     /**
-     * Returns the value of field currency
+     * Returns the value of field currency_id
      *
      * @return string
      */
-    public function getCurrency()
+    public function getCurrencyId()
     {
-        return $this->currency;
+        return $this->currency_id;
     }
 
     /**
@@ -286,6 +296,27 @@ class Offer extends Model
         $this->setSource('offers');
 
         $this->belongsTo('user_id', 'Model\\User', 'id', ['alias' => 'User']);
+        $this->belongsTo('currency_id', 'Model\\Currency', 'id', ['alias' => 'Currency']);
+
+        $this->addBehavior(new Model\Behavior\Timestampable([
+            'beforeCreate' => [
+                'field' => 'start_date',
+                'format' => 'Y-m-d H:i:s',
+            ],
+            'beforeUpdate' => [
+                'field' => 'update_date',
+                'format' => 'Y-m-d H:i:s',
+            ]
+        ]));
+    }
+
+    public function beforeSave()
+    {
+        foreach (['start_date', 'end_date', 'update_date'] as $field) {
+            if ($this->$field instanceof \DateTime) {
+                $this->$field = $this->$field->format('Y-m-d H:i:s');
+            }
+        }
     }
 
     /**
@@ -293,17 +324,17 @@ class Offer extends Model
      */
     public function columnMap()
     {
-        return array(
+        return [
             'id' => 'id',
             'offer_type' => 'offer_type',
-            'currency' => 'currency',
+            'currency_id' => 'currency_id',
             'amount' => 'amount',
             'start_date' => 'start_date',
             'end_date' => 'end_date',
             'update_date' => 'update_date',
             'user_id' => 'user_id',
-            'rate' => 'rate'
-        );
+            'rate' => 'rate',
+        ];
     }
 
 }

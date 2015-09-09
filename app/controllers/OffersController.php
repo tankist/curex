@@ -5,6 +5,7 @@ namespace Controller;
 use Controller\Exception\AccessDeniedException;
 use Controller\Exception\NotFoundException;
 use Model\Offer;
+use Phalcon\Validation\Message;
 
 /**
  * Class OffersController
@@ -23,7 +24,13 @@ class OffersController extends ControllerBase
 
     public function newAction()
     {
-
+        /** @var \Form\Offer $form */
+        $form = $this->forms->get('offer');
+        if ($data = $this->session->get('saveOfferData')) {
+            $form->bind(json_decode($data, true), new Offer());
+            $this->session->remove('saveOfferData');
+        }
+        $this->view->setVar('form', $form);
     }
 
     public function editAction()
@@ -43,28 +50,47 @@ class OffersController extends ControllerBase
     {
         $id = $this->request->getPost('id', 'int');
         $offer = Offer::findFirst($id);
+        $fallbackParams = [
+            'for' => 'editOffer',
+            'id' => $id,
+        ];
         if (!$offer instanceof Offer) {
             //New offer
             $offer = new Offer();
-            $offer->setStartDate(new \DateTime());
             $offer->setUserId($this->user->getId());
+            $fallbackParams['for'] = 'newOffer';
+            unset($fallbackParams['id']);
         } else {
             if ($offer->getUserId() !== $this->user->getId()) {
                 throw new AccessDeniedException('This is not your offer');
             }
         }
 
-        $form = new \Form\Offer();
+        $form = $this->forms->get('offer');
         if ($this->request->isPost()) {
             $form->bind($this->request->getPost(), $offer);
             if ($form->isValid()) {
-                $offer->setUpdateDate(new \DateTime());
-                $offer->save();
-                $this->flashSession->success('Your offer was added successfully');
-            } else {
-                foreach ($form->getMessages() as $message) {
-                    $this->flashSession->error($message);
+                $result = $offer->save();
+                if ($result) {
+                    $this->flashSession->success('Your offer was added successfully');
+                } else {
+                    /** @var Message $message */
+                    foreach ($form->getMessages() as $message) {
+                        $this->flashSession->error($message->getMessage());
+                    }
                 }
+            } else {
+                /** @var Message $message */
+                foreach ($form->getMessages() as $message) {
+                    $this->flashSession->error($message->getMessage());
+                }
+                $editOfferData = [];
+                foreach ($form->getElements() as $element) {
+                    $editOfferData[$element->getName()] = $element->getValue();
+                }
+                $this->session->set('saveOfferData', json_encode($this->request->getPost()));
+                $this->response->redirect($this->url->get($fallbackParams), true);
+                return;
             }
         }
         $this->response->redirect('/', true);
@@ -83,6 +109,5 @@ class OffersController extends ControllerBase
         $offer->delete();
         $this->response->redirect('/', true);
     }
-
 }
 

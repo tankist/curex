@@ -1,11 +1,11 @@
 <section class="filter">
     <form action="#filter" class="form-inline">
-        <div class="form-group"><label for="currency-select"
-                                       class="sr-only">Currency</label><select name="currency"
+        <div class="form-group"><label for="currency-select">Currency</label><select name="currency"
                                                                                id="currency-select">
                 <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
             </select></div>
+        <a class="btn btn-primary" href="{{url(['for': 'newOffer'])}}" role="button">Add offer</a>
     </form>
 </section>
 {% if offers.count() > 0 %}
@@ -23,12 +23,12 @@
     <tbody>
     {% for offer in offers %}
     <tr>
-        <td>{{ offer.getName() }}</td>
-        <td>{{ offer.getType() }}</td>
-        <td>{{ offer.getCurrency() }}</td>
+        <td>{{ offer.getUser().getFullName() }}</td>
+        <td>{{ offer.getOfferType() | capitalize }}</td>
+        <td>{{ offer.getCurrency().getTitle() }}</td>
         <td>{{ offer.getAmount() }}</td>
         <td>{{ offer.getRate() }}</td>
-        <td>{{ offer.getEndDate() }}</td>
+        <td>{{ offer.getEndDate() | default("Unlimited") }}</td>
     </tr>
     {% endfor %}
     </tbody>

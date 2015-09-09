@@ -2,12 +2,13 @@
 
 namespace Form;
 
-use Phalcon\Forms\Element\Date;
+use Model\Currency;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Numeric;
 use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Form;
 use Model\Offer as OfferModel;
+use Phalcon\Validation\Validator\PresenceOf;
 
 /**
  * Class Offer
@@ -27,19 +28,33 @@ class Offer extends Form
         ]);
         $this->add($offerType);
 
-        $currency = new Select('currency', [
-            'USD' => 'USD',
-            'EUR' => 'EUR',
-        ]);
+        $currency = new Select('currency_id', $this->getCurrenciesArray());
+        $currency->setLabel('Currency');
         $this->add($currency);
 
         $amount = new Numeric('amount');
         $this->add($amount);
 
-        $endDate = new Date('end_date');
-        $this->add($endDate);
-
         $rate = new Numeric('rate');
         $this->add($rate);
+
+        $amount->addValidator(new PresenceOf());
+        $rate->addValidator(new PresenceOf());
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getCurrenciesArray()
+    {
+        $currencies = [];
+        /** @var Currency[] $currenciesRecordSet */
+        $currenciesRecordSet = Currency::find();
+        foreach ($currenciesRecordSet as $currency) {
+            $currencies[$currency->getId()] = $currency->getTitle();
+        }
+        return $currencies;
     }
 }

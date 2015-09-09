@@ -14,6 +14,8 @@ use Phalcon\Acl\Resource as AclResource;
 use Phalcon\Acl\ResourceInterface as AclResourceInterface;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Dispatcher;
+use Phalcon\Session\Adapter\Files as Session;
+use Phalcon\Forms\Manager as FormsManager;
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
@@ -181,6 +183,21 @@ $di['flashSession'] = function () {
         )
     );
     return $flash;
+};
+
+$di['session'] = function () {
+    $session = new Session();
+    $session->start();
+    return $session;
+};
+
+$di['forms'] = function () {
+    $formsManager = new FormsManager();
+    $forms = (array) @include __DIR__ . "/forms.php";
+    foreach ($forms as $name => $form) {
+        $formsManager->set($name, $form);
+    }
+    return $formsManager;
 };
 
 return $di;

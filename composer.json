@@ -17,7 +17,8 @@
             "Controller\\": "app/controllers/",
             "Model\\": "app/models/",
             "Plugin\\": "app/plugins/",
-            "Form\\": "app/forms/"
+            "Form\\": "app/forms/",
+            "Mixin\\": "app/mixins/"
         }
     }
 }

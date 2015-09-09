@@ -1,11 +1,11 @@
 <?php
 
 use Phalcon\Db\RasColumn as Column;
+use Phalcon\Db\RasIndex;
 use Phalcon\Db\Reference;
 use Phalcon\Mvc\Model\Migration;
-use Phalcon\Db\RasIndex;
 
-class OffersMigration_101 extends Migration
+class OffersMigration_103 extends Migration
 {
 
     public function up()
@@ -34,11 +34,10 @@ class OffersMigration_101 extends Migration
                         ]
                     ),
                     new Column(
-                        'currency',
+                        'currency_id',
                         [
                             'type' => Column::TYPE_INTEGER,
-                            'notNull' => true,
-                            'size' => 3,
+                            'size' => 11,
                             'after' => 'offer_type',
                         ]
                     ),
@@ -47,14 +46,13 @@ class OffersMigration_101 extends Migration
                         [
                             'type' => Column::TYPE_DECIMAL,
                             'notNull' => true,
-                            'after' => 'currency',
+                            'after' => 'currency_id',
                         ]
                     ),
                     new Column(
                         'start_date',
                         [
                             'type' => Column::TYPE_DATETIME,
-                            'notNull' => false,
                             'after' => 'amount',
                         ]
                     ),
@@ -62,7 +60,6 @@ class OffersMigration_101 extends Migration
                         'end_date',
                         [
                             'type' => Column::TYPE_DATETIME,
-                            'notNull' => false,
                             'after' => 'start_date',
                         ]
                     ),
@@ -70,7 +67,6 @@ class OffersMigration_101 extends Migration
                         'update_date',
                         [
                             'type' => Column::TYPE_DATETIME,
-                            'notNull' => false,
                             'after' => 'end_date',
                         ]
                     ),
@@ -95,8 +91,15 @@ class OffersMigration_101 extends Migration
                 'indexes' => [
                     new RasIndex('PRIMARY', ['id']),
                     new RasIndex('user_id', ['user_id']),
+                    new RasIndex('currency_id', ['currency_id']),
                 ],
                 'references' => [
+                    new Reference('offers_ibfk_2', [
+                        'referencedSchema' => 'curex',
+                        'referencedTable' => 'currencies',
+                        'columns' => ['currency_id'],
+                        'referencedColumns' => ['id']
+                    ]),
                     new Reference('offers_ibfk_1', [
                         'referencedSchema' => 'curex',
                         'referencedTable' => 'users',

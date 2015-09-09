@@ -92,7 +92,7 @@ class OffersMigration_100 extends Migration
                     new Reference('offers_ibfk_1', [
                         'referencedSchema' => 'curex',
                         'referencedTable' => 'users',
-                        'columns' => array('user_id'),
+                        'columns' => ['user_id'],
                         'referencedColumns' => ['id']
                     ]),
                 ],
